@@ -1,0 +1,19 @@
+---
+version: '3.6'
+services:
+  database:
+    environment:
+      MYSQL_ROOT_PASSWORD: examplepass
+    image: mysql:5.7
+
+  sut:
+    build:
+      context: .
+    command:
+      - sh
+      - -c
+      - "phpunit --version && phpcs --version"
+    depends_on:
+      - database
+    environment:
+      DATABASE_PASSWORD: examplepass

@@ -1,0 +1,37 @@
+---
+- name: Docker Official Images WordPress
+  license: GPL-2.0-or-later
+  source: https://hub.docker.com/_/wordpress
+- name: wget
+  license: GPL-3.0-or-later
+  source: https://github.com/mirror/wget/blob/master/COPYING
+- name: Composer
+  license: MIT
+  source: https://github.com/composer/composer/blob/master/LICENSE
+- name: PHPUnit
+  license: BSD-3-Clause
+  source: https://github.com/sebastianbergmann/phpunit/blob/master/LICENSE
+- name: PHP_CodeSniffer Standards Composer Installer Plugin
+  license: MIT
+  source: https://github.com/Dealerdirect/phpcodesniffer-composer-installer/blob/master/LICENSE.md
+- name: WordPress Coding Standards for PHP_CodeSniffer
+  license: MIT
+  source: https://github.com/WordPress/WordPress-Coding-Standards/blob/develop/LICENSE
+- name: PHPCompatibilityWP
+  license: LGPL-3.0
+  source: https://github.com/PHPCompatibility/PHPCompatibilityWP/blob/master/LICENSE
+- name: VIP Coding Standards
+  license: GPL-2.0-or-later
+  source: https://github.com/Automattic/VIP-Coding-Standards/blob/develop/LICENSE.md
+- name: Subversion
+  license: GPL-2.0-or-later
+  source: https://github.com/apache/subversion/blob/trunk/LICENSE
+- name: MySQL Client
+  license: other
+  source: https://www.mysql.com/about/legal/
+- name: wp-cli/scaffold-command
+  license: MIT
+  source: https://github.com/wp-cli/scaffold-command/blob/master/LICENSE
+- name: wait-for-it
+  license: MIT
+  source: https://github.com/vishnubob/wait-for-it/blob/master/LICENSE
