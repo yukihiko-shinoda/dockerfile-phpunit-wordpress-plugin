@@ -32,14 +32,13 @@ services:
     image: mysql:5.7
 
   phpunit:
-    container_name: phpunit
     command:
       - bash
+    container_name: phpunit
     depends_on:
       - database
     environment:
       DATABASE_PASSWORD: examplepass
-      DATABASE_HOST: database:3306
     image: phpunit-wordpress-plugin
     stdin_open: true
     tty: true
