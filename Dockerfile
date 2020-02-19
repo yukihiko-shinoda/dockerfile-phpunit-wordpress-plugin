@@ -11,7 +11,9 @@ RUN composer global require \
     wp-coding-standards/wpcs \
     dealerdirect/phpcodesniffer-composer-installer \
     phpcompatibility/phpcompatibility-wp \
-    automattic/vipwpcs
+    automattic/vipwpcs \
+# ↓ To use mock some functions of WordPress like "wp_remote_get"
+    mockery/mockery
 ENV PATH $PATH:/root/.composer/vendor/bin
 # ↓ Dependencies for install-wp-tests.sh
 RUN apt install -y subversion default-mysql-client
