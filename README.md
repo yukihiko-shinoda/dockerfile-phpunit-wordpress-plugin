@@ -1,6 +1,7 @@
-![docker build automated?](https://img.shields.io/docker/cloud/automated/futureys/phpunit-wordpress-plugin.svg)
-![docker build passing?](https://img.shields.io/docker/cloud/build/futureys/phpunit-wordpress-plugin.svg)
-![microbadger](https://images.microbadger.com/badges/image/futureys/phpunit-wordpress-plugin.svg)
+<!-- markdownlint-disable first-line-h1 -->
+[![docker build automated?](https://img.shields.io/docker/cloud/automated/futureys/phpunit-wordpress-plugin.svg)](https://hub.docker.com/r/futureys/phpunit-wordpress-plugin/builds)
+[![docker build passing?](https://img.shields.io/docker/cloud/build/futureys/phpunit-wordpress-plugin.svg)](https://hub.docker.com/r/futureys/phpunit-wordpress-plugin/builds)
+[![image size and number of layers](https://images.microbadger.com/badges/image/futureys/phpunit-wordpress-plugin.svg)](https://hub.docker.com/r/futureys/phpunit-wordpress-plugin/dockerfile)
 
 # Quick reference
 
@@ -8,7 +9,9 @@
 
   [Plugin Unit Tests – WP-CLI — WordPress.org](https://make.wordpress.org/cli/handbook/plugin-unit-tests/#running-tests-locally)
 
+<!-- markdownlint-disable no-trailing-punctuation -->
 # What is PHPUnit WordPress Plugin?
+<!-- markdownlint-enable no-trailing-punctuation -->
 
 This is PHPUnit environment for WordPress Plugin.
 

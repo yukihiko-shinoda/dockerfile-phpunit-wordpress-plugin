@@ -1,4 +1,4 @@
-FROM wordpress:5.3.2-php7.3-apache
+FROM wordpress:5.4.0-php7.3-apache
 RUN apt update
 RUN apt install -y wget
 RUN sh -c 'wget https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer -O - -q | php -- --quiet' \
@@ -23,7 +23,7 @@ RUN wget -O /usr/bin/install-wp-tests https://raw.githubusercontent.com/wp-cli/s
  && chmod +x /usr/bin/install-wp-tests
 ENV WP_CORE_DIR /usr/src/wordpress/
 RUN touch wp-tests-config.php \
- && install-wp-tests '' '' '' localhost 5.3.2 true \
+ && install-wp-tests '' '' '' localhost 5.4.0 true \
  && rm -f wp-tests-config.php \
  && rm -f /tmp/install-wp-tests.sh
 # ↓ @see http://docs.docker.jp/compose/startup-order.html
