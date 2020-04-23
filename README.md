@@ -42,7 +42,7 @@ services:
       - database
     environment:
       DATABASE_PASSWORD: examplepass
-    image: phpunit-wordpress-plugin
+    image: futureys/phpunit-wordpress-plugin
     stdin_open: true
     tty: true
     volumes:
