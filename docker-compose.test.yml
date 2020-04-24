@@ -4,11 +4,14 @@ services:
   database:
     environment:
       MYSQL_ROOT_PASSWORD: examplepass
-    image: mysql:5.7
+    image: mysql:${MYSQL_VERSION:?err}
 
   sut:
     build:
       context: .
+      args:
+        WORDPRESS_VERSION: ${WORDPRESS_VERSION:?err}
+        PHP_VERSION: ${PHP_VERSION:?err}
     command:
       - sh
       - -c
