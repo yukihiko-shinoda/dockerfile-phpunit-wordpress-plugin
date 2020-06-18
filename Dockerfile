@@ -31,13 +31,18 @@ RUN composer global require --prefer-dist hirak/prestissimo \
 ENV PATH $PATH:/root/.composer/vendor/bin
 # ↓ Hot-fix for HTTP status 429 'Too Many Requests' when checkout testing suite in install-wp-tests
 # ↓ @see https://wordpress.org/support/topic/too-many-requests-when-trying-to-checkout-plugin/
-RUN wget -O /usr/bin/install-wp-tests https://raw.githubusercontent.com/wp-cli/scaffold-command/4814acbdf3d7af499530cc1ae1e82f3ed9f12674/templates/install-wp-tests.sh \
+RUN wget -O /usr/bin/install-wp-tests https://raw.githubusercontent.com/wp-cli/scaffold-command/v2.0.9/templates/install-wp-tests.sh \
+# ↓ Hot-fix for install-wp-tests.sh
+# ↓ @see https://github.com/wp-cli/scaffold-command/pull/269
+ && sed -i "s/if\s\[\s\\\$(mysql\s--user=\"\\\$DB_USER\"\s--password=\"\\\$DB_PASS\"\s--execute='show databases;'\s|\sgrep\s^\\\$DB_NAME\\\$)\s\]/if [ \$(mysql --user=\"\$DB_USER\" --password=\"\$DB_PASS\"\$EXTRA --execute='show databases;' | grep ^\$DB_NAME\$) ]/" /usr/bin/install-wp-tests \
+ && sed -i "/read\s-p\s'Are\syou\ssure\syou\swant\sto\sproceed?\s\[y\/N\]:\s'\sDELETE_EXISTING_DB/d" /usr/bin/install-wp-tests \
  && chmod +x /usr/bin/install-wp-tests
+# ↓ I decided "for the time being," "yes" may not be definitely better.
+ENV DELETE_EXISTING_DB yes
 ENV WP_CORE_DIR /usr/src/wordpress/
 RUN touch wp-tests-config.php \
  && install-wp-tests '' '' '' localhost "${WORDPRESS_VERSION}" true \
- && rm -f wp-tests-config.php \
- && rm -f /tmp/install-wp-tests.sh
+ && rm -f wp-tests-config.php
 # ↓ @see http://docs.docker.jp/compose/startup-order.html
 RUN wget -O /usr/bin/wait-for-it https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh \
  && chmod +x /usr/bin/wait-for-it
