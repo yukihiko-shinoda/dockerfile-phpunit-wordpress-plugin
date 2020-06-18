@@ -25,7 +25,7 @@ RUN composer global require --prefer-dist hirak/prestissimo \
     phpcompatibility/phpcompatibility-wp \
     automattic/vipwpcs \
 # ↓ To use mock some functions of WordPress like "wp_remote_get"
-    mockery/mockery \
+    mockery/mockery:1.3.* \
  && composer global remove hirak/prestissimo \
  && composer global clear-cache
 ENV PATH $PATH:/root/.composer/vendor/bin
