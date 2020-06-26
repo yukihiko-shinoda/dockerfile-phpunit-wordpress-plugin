@@ -9,7 +9,8 @@ RUN apt update \
 # ↓ git                 : To install dependency of PHPUnit 5.* at least myclabs/deep-copy
 # ↓ subversion          : Dependencies for install-wp-tests.sh
 # ↓ default-mysql-client: Dependencies for install-wp-tests.sh
- && apt install -y git wget subversion default-mysql-client \
+# ↓ unzip               : Dependencies for install-wp-tests.sh in case when WordPress version is nightly or trunk
+ && apt install -y git wget subversion default-mysql-client unzip \
  && apt clean
 RUN sh -c 'wget https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer -O - -q | php -- --quiet' \
  && mv ./composer.phar /bin/composer
