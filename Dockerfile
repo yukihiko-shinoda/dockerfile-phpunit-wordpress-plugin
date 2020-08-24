@@ -16,8 +16,8 @@ RUN sh -c 'wget https://raw.githubusercontent.com/composer/getcomposer.org/76a70
 # ↓ To make Composer faster
 RUN composer global require --prefer-dist hirak/prestissimo \
  && composer global require --prefer-dist \
-# ↓ 2019-11-18 WordPress supports PHPUnit 5.x
-# ↓ @see https://make.wordpress.org/cli/handbook/plugin-unit-tests/
+# ↓ 2020-08-24 WordPress supports PHPUnit 7.x
+# ↓ @see https://core.trac.wordpress.org/ticket/50482#comment:8
     phpunit/phpunit:"<8.0.0" \
 # ↓ To execute static analysis by PHP_CodeSniffer
     wp-coding-standards/wpcs \
