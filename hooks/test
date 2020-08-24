@@ -6,9 +6,9 @@ run_matrix_test() {
 
     while read software_version_line; do
         wordpress_version=$(echo "${software_version_line}" | cut -d ',' -f 1)
-        php_version=$(echo "${software_version_line}" | cut -d ',' -f 2)
+        php_image_tag=$(echo "${software_version_line}" | cut -d ',' -f 2)
         mysql_version=$(echo "${software_version_line}" | cut -d ',' -f 3)
-        echo -e "WORDPRESS_VERSION=${wordpress_version}\nPHP_VERSION=${php_version}\nMYSQL_VERSION=${mysql_version}\n" > .env
+        echo -e "WORDPRESS_VERSION=${wordpress_version}\nPHP_IMAGE_TAG=${php_image_tag}\nMYSQL_VERSION=${mysql_version}\n" > .env
 
         echo "Starting Test in ${test_path}..."
         docker-compose -f "${test_path}" pull

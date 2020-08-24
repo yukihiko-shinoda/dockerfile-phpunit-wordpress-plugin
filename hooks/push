@@ -24,8 +24,8 @@ check_docker_tag() {
 run_matrix_push() {
     while read software_version_line; do
         wordpress_version=$(echo "${software_version_line}" | cut -d ',' -f 1)
-        php_version=$(echo "${software_version_line}" | cut -d ',' -f 2)
-        image_tag="${DOCKER_REPO}:${wordpress_version}-php${php_version}-apache-buster"
+        php_image_tag=$(echo "${software_version_line}" | cut -d ',' -f 2)
+        image_tag="${DOCKER_REPO}:${wordpress_version}-php${php_image_tag}"
 
         docker push "${image_tag}"
     done < software-versions.txt
@@ -35,8 +35,8 @@ run_matrix_push() {
 tag_and_push_latest() {
     latest_software_version=$(cat software-versions.txt | head -n 1)
     wordpress_version=$(echo "${latest_software_version}" | cut -d ',' -f 1)
-    php_version=$(echo "${latest_software_version}" | cut -d ',' -f 2)
-    docker tag "${DOCKER_REPO}:${wordpress_version}-php${php_version}-apache-buster" "${DOCKER_REPO}:latest"
+    php_image_tag=$(echo "${latest_software_version}" | cut -d ',' -f 2)
+    docker tag "${DOCKER_REPO}:${wordpress_version}-php${php_image_tag}" "${DOCKER_REPO}:latest"
     docker push "${DOCKER_REPO}:latest"
 }
 

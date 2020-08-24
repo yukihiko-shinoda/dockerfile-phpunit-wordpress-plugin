@@ -1,7 +1,6 @@
-ARG PHP_VERSION
-FROM php:${PHP_VERSION}-apache-buster
+ARG PHP_IMAGE_TAG
+FROM php:${PHP_IMAGE_TAG}
 ARG WORDPRESS_VERSION
-ARG PHP_VERSION
 # ↓ @see https://github.com/docker-library/php/issues/391#issuecomment-346590029
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 RUN apt update \
@@ -19,13 +18,14 @@ RUN composer global require --prefer-dist hirak/prestissimo \
  && composer global require --prefer-dist \
 # ↓ 2019-11-18 WordPress supports PHPUnit 5.x
 # ↓ @see https://make.wordpress.org/cli/handbook/plugin-unit-tests/
-    phpunit/phpunit:5.* \
+    phpunit/phpunit:"<8.0.0" \
 # ↓ To execute static analysis by PHP_CodeSniffer
     wp-coding-standards/wpcs \
     dealerdirect/phpcodesniffer-composer-installer \
     phpcompatibility/phpcompatibility-wp \
     automattic/vipwpcs \
 # ↓ To use mock some functions of WordPress like "wp_remote_get"
+# ↓ Only 1.3.* is allowed since 1.4 or more requires PHPUnit 8.0 or more
     mockery/mockery:1.3.* \
  && composer global remove hirak/prestissimo \
  && composer global clear-cache
