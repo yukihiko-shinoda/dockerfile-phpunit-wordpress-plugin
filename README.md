@@ -26,10 +26,9 @@ Example docker-compose.yml for mysql:
 
 ```yaml
 ---
-version: '3.7'
+version: '3.8'
 services:
   database:
-    container_name: database
     environment:
       MYSQL_ROOT_PASSWORD: examplepass
     image: mysql:5.7
@@ -37,7 +36,6 @@ services:
   phpunit:
     command:
       - bash
-    container_name: phpunit
     depends_on:
       - database
     environment:
