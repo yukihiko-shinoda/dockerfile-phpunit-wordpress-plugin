@@ -11,6 +11,7 @@ RUN apt update \
 # ↓ unzip               : Dependencies for install-wp-tests.sh in case when WordPress version is nightly or trunk
  && apt install -y git wget subversion default-mysql-client unzip \
  && apt clean
+# ↓ @see https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
 RUN sh -c 'wget https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer -O - -q | php -- --quiet' \
  && mv ./composer.phar /bin/composer
 RUN composer global require --prefer-dist \
@@ -25,7 +26,6 @@ RUN composer global require --prefer-dist \
 # ↓ To use mock some functions of WordPress like "wp_remote_get"
 # ↓ Only 1.3.* is allowed since 1.4 or more requires PHPUnit 8.0 or more
     mockery/mockery:1.3.* \
- && composer global remove hirak/prestissimo \
  && composer global clear-cache
 ENV PATH $PATH:/root/.composer/vendor/bin
 # ↓ Hot-fix for HTTP status 429 'Too Many Requests' when checkout testing suite in install-wp-tests
