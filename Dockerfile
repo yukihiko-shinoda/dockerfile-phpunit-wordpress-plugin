@@ -13,9 +13,7 @@ RUN apt update \
  && apt clean
 RUN sh -c 'wget https://raw.githubusercontent.com/composer/getcomposer.org/76a7060ccb93902cd7576b67264ad91c8a2700e2/web/installer -O - -q | php -- --quiet' \
  && mv ./composer.phar /bin/composer
-# ↓ To make Composer faster
-RUN composer global require --prefer-dist hirak/prestissimo \
- && composer global require --prefer-dist \
+RUN composer global require --prefer-dist \
 # ↓ 2020-08-24 WordPress supports PHPUnit 7.x
 # ↓ @see https://core.trac.wordpress.org/ticket/50482#comment:8
     phpunit/phpunit:"<8.0.0" \
