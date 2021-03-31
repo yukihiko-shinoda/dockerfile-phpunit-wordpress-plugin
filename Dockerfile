@@ -30,10 +30,8 @@ RUN composer global require --prefer-dist \
 ENV PATH $PATH:/root/.composer/vendor/bin
 # ↓ Hot-fix for HTTP status 429 'Too Many Requests' when checkout testing suite in install-wp-tests
 # ↓ @see https://wordpress.org/support/topic/too-many-requests-when-trying-to-checkout-plugin/
-RUN wget -O /usr/bin/install-wp-tests https://raw.githubusercontent.com/wp-cli/scaffold-command/v2.0.9/templates/install-wp-tests.sh \
-# ↓ Hot-fix for install-wp-tests.sh
-# ↓ @see https://github.com/wp-cli/scaffold-command/pull/269
- && sed -i "s/if\s\[\s\\\$(mysql\s--user=\"\\\$DB_USER\"\s--password=\"\\\$DB_PASS\"\s--execute='show databases;'\s|\sgrep\s^\\\$DB_NAME\\\$)\s\]/if [ \$(mysql --user=\"\$DB_USER\" --password=\"\$DB_PASS\"\$EXTRA --execute='show databases;' | grep ^\$DB_NAME\$) ]/" /usr/bin/install-wp-tests \
+RUN wget -O /usr/bin/install-wp-tests https://raw.githubusercontent.com/wp-cli/scaffold-command/v2.0.12/templates/install-wp-tests.sh \
+# ↓ Remove confirmation for initialize test database since it stops automated testing
  && sed -i "/read\s-p\s'Are\syou\ssure\syou\swant\sto\sproceed?\s\[y\/N\]:\s'\sDELETE_EXISTING_DB/d" /usr/bin/install-wp-tests \
  && chmod +x /usr/bin/install-wp-tests
 # ↓ I decided "for the time being," "yes" may not be definitely better.
