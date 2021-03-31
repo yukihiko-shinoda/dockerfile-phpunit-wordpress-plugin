@@ -2,6 +2,7 @@
 version: '3.6'
 services:
   database:
+    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: examplepass
     image: mysql:${MYSQL_VERSION:?err}
