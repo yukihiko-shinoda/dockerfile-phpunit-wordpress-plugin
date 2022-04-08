@@ -16,7 +16,7 @@ services:
     command:
       - sh
       - -c
-      - "phpunit --version && phpcs --version"
+      - "phpunit --version && phpcs --version && php --version"
     depends_on:
       - database
     environment:
