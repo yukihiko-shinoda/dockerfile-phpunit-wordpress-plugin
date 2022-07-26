@@ -1,0 +1,45 @@
+name: Test
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+jobs:
+  test:
+    strategy:
+      matrix:
+        software-versions:
+          - ["6.0.1", "7.4.30-apache-bullseye", "8.0.29"]
+          - ["5.7.0", "7.4.16-apache-buster", "8.0.23"]
+          - ["5.5.0", "7.4.8-apache-buster", "5.7"]
+          - ["5.5.0", "5.6.40-apache-stretch", "5.7"]
+          - ["5.4.2", "7.3.19-apache-buster", "5.7"]
+          - ["5.4.0", "7.3.17-apache-buster", "5.7"]
+          - ["4.3.22", "7.1.33-apache-buster", "5.6"]
+    env:
+      WORDPRESS_VERSION: ${{ matrix.software-versions[0] }}
+      PHP_IMAGE_TAG: ${{ matrix.software-versions[1] }}
+      MYSQL_VERSION: ${{ matrix.software-versions[2] }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: docker/setup-qemu-action@v2
+      - id: buildx
+        uses: docker/setup-buildx-action@v2
+      - uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_TOKEN }}
+      - uses: docker/build-push-action@v3
+        with:
+          load: true
+          builder: ${{ steps.buildx.outputs.name }}
+          build-args: |
+            WORDPRESS_VERSION=${{ env.WORDPRESS_VERSION }}
+            PHP_IMAGE_TAG=${{ env.PHP_IMAGE_TAG }}
+          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/phpunit-wordpress-plugin:buildcache
+          cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/phpunit-wordpress-plugin:buildcache,mode=max
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/phpunit-wordpress-plugin:test
+      - uses: actions/checkout@v3
+      - run: docker-compose -f docker-compose.test.yml run --rm sut
