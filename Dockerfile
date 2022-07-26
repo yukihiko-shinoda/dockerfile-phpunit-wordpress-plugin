@@ -17,6 +17,11 @@ RUN sh -c 'wget https://raw.githubusercontent.com/composer/getcomposer.org/76a70
 RUN composer global require --prefer-dist \
 # ↓ 2020-08-24 WordPress supports PHPUnit 7.x
 # ↓ @see https://core.trac.wordpress.org/ticket/50482#comment:8
+# ↓ 2021-07-26 We still have to wait for update of WordPress to use PHPUnit 8 or more.
+# ↓ WordPress hasn't support PHPUnit 8 or more with backward compatibility like for `void` return type declaration.
+# ↓ Now they are trying to introduce PHPUnit Polyfills to resolve this issue:
+# ↓ @see https://core.trac.wordpress.org/changeset/51567
+# ↓ @see https://core.trac.wordpress.org/changeset/51568
     phpunit/phpunit:"<8.0.0" \
 # ↓ 2020-11-23 WordPress started to require when running PHPUnit from WordPress 5.8.2
     yoast/phpunit-polyfills \
