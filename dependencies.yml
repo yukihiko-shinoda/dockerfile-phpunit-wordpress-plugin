@@ -11,6 +11,9 @@
 - name: PHPUnit
   license: BSD-3-Clause
   source: https://github.com/sebastianbergmann/phpunit/blob/master/LICENSE
+- name: PHPUnit Polyfills
+  license: BSD-3-Clause
+  source: https://github.com/Yoast/PHPUnit-Polyfills/blob/develop/LICENSE
 - name: PHP_CodeSniffer Standards Composer Installer Plugin
   license: MIT
   source: https://github.com/Dealerdirect/phpcodesniffer-composer-installer/blob/master/LICENSE.md
@@ -23,9 +26,15 @@
 - name: VIP Coding Standards
   license: GPL-2.0-or-later
   source: https://github.com/Automattic/VIP-Coding-Standards/blob/develop/LICENSE.md
+- name: Mockery
+  license: BSD-3-Clause
+  source: https://github.com/mockery/mockery/blob/master/LICENSE
 - name: Subversion
   license: GPL-2.0-or-later
   source: https://github.com/apache/subversion/blob/trunk/LICENSE
+- name: Git
+  license: GPL-2.0-or-later
+  source: https://github.com/git/git/blob/master/COPYING
 - name: MySQL Client
   license: other
   source: https://www.mysql.com/about/legal/
