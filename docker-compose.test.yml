@@ -13,6 +13,7 @@ services:
       args:
         WORDPRESS_VERSION: ${WORDPRESS_VERSION:?err}
         PHP_IMAGE_TAG: ${PHP_IMAGE_TAG:?err}
+        PHP_UNIT_VERSION: ${PHP_UNIT_VERSION:-}
     command:
       - sh
       - -c
@@ -21,3 +22,4 @@ services:
       - database
     environment:
       DATABASE_PASSWORD: examplepass
+    image: futureys/phpunit-wordpress-plugin:${WORDPRESS_VERSION}-php${PHP_IMAGE_TAG}
