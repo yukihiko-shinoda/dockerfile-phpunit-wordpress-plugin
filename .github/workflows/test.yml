@@ -9,8 +9,10 @@ on:
 jobs:
   test:
     strategy:
+      fail-fast: false
       matrix:
         software-versions:
+          - ["6.1.1", "8.0.26-apache-bullseye", "8.0.31"]
           - ["6.0.1", "7.4.30-apache-bullseye", "8.0.29"]
           - ["5.7.0", "7.4.16-apache-buster", "8.0.23"]
           - ["5.5.0", "7.4.8-apache-buster", "5.7"]
@@ -40,6 +42,6 @@ jobs:
             PHP_IMAGE_TAG=${{ env.PHP_IMAGE_TAG }}
           cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/phpunit-wordpress-plugin:buildcache
           cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/phpunit-wordpress-plugin:buildcache,mode=max
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/phpunit-wordpress-plugin:test
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/phpunit-wordpress-plugin:${{ env.WORDPRESS_VERSION }}-php${{ env.PHP_IMAGE_TAG }}
       - uses: actions/checkout@v3
       - run: docker-compose -f docker-compose.test.yml run --rm sut
