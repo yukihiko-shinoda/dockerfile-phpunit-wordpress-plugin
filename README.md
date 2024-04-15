@@ -1,7 +1,5 @@
 <!-- markdownlint-disable first-line-h1 -->
 [![Test](https://github.com/yukihiko-shinoda/dockerfile-phpunit-wordpress-plugin/actions/workflows/test.yml/badge.svg)](https://github.com/yukihiko-shinoda/phpunit-deploy-wordpress-plugin/actions/workflows/test.yml)
-[![docker build automated?](https://img.shields.io/docker/cloud/automated/futureys/phpunit-wordpress-plugin.svg)](https://hub.docker.com/r/futureys/phpunit-wordpress-plugin/builds)
-[![docker build passing?](https://img.shields.io/docker/cloud/build/futureys/phpunit-wordpress-plugin.svg)](https://hub.docker.com/r/futureys/phpunit-wordpress-plugin/builds)
 [![Docker Image Size (latest semver)](https://img.shields.io/docker/image-size/futureys/phpunit-wordpress-plugin)](https://hub.docker.com/r/futureys/phpunit-wordpress-plugin/dockerfile)
 
 # Quick reference
@@ -27,7 +25,6 @@ Example docker-compose.yml for mysql:
 
 ```yaml
 ---
-version: '3.8'
 services:
   database:
     environment:
