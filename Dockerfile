@@ -5,6 +5,8 @@ ARG WORDPRESS_VERSION
 ARG PHP_UNIT_VERSION=
 # ↓ @see https://github.com/docker-library/php/issues/391#issuecomment-346590029
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN if echo $PHP_IMAGE_TAG | grep -q 'stretch' ; then echo "deb http://archive.debian.org/debian stretch main contrib non-free" > /etc/apt/sources.list ; fi
 RUN apt-get update \
 # ↓ wget                : To set up this image
 # ↓ git                 : To install dependency of PHPUnit 5.* at least myclabs/deep-copy
