@@ -2,10 +2,10 @@ name: Test
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 jobs:
   # - How to share matrix between jobs · community · Discussion #26284
   #   https://github.com/orgs/community/discussions/26284#discussioncomment-3251198
@@ -14,11 +14,11 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - id: set-matrix
         run: |
           TASKS=$(echo $(cat software-versions.json) | sed 's/ //g' )
-          echo "::set-output name=matrix::$TASKS"
+          echo "matrix=$TASKS" >> $GITHUB_OUTPUT
   test:
     needs: [ matrix ]
     strategy:
@@ -26,11 +26,13 @@ jobs:
       matrix:
         software-versions: ${{ fromJson(needs.matrix.outputs.matrix) }}
     env:
-      WORDPRESS_VERSION: ${{ matrix.software-versions[0] }}
-      PHP_IMAGE_TAG: ${{ matrix.software-versions[1] }}
-      MYSQL_VERSION: ${{ matrix.software-versions[2] }}
+      PHP_IMAGE_TAG: ${{ matrix.software-versions[0] }}
+      SCAFFOLD_COMMAND_VERSION: ${{ matrix.software-versions[1] }}
+      WORDPRESS_VERSION: ${{ matrix.software-versions[2] }}
       PHP_UNIT_VERSION: ${{ matrix.software-versions[3] }}
-      DOCKER_HUB_IMAGE_NAME: 'phpunit-wordpress-plugin'
+      MYSQL_VERSION: ${{ matrix.software-versions[4] }}
+      #Since the image: futureys/ssl-certificate:2.0.2 only supports sud-domain.
+      DOMAIN_NAME: futureys.net
     runs-on: ubuntu-latest
     steps:
       - uses: docker/setup-qemu-action@v3
@@ -40,16 +42,11 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
-      - uses: docker/build-push-action@v5
+      - id: extract-tag
+        run: echo "DOCKER_TAG=test" >> $GITHUB_ENV
+      - uses: docker/bake-action@v6
         with:
-          load: true
           builder: ${{ steps.buildx.outputs.name }}
-          build-args: |
-            WORDPRESS_VERSION=${{ env.WORDPRESS_VERSION }}
-            PHP_IMAGE_TAG=${{ env.PHP_IMAGE_TAG }}
-            PHP_UNIT_VERSION=${{ env.PHP_UNIT_VERSION }}
-          cache-from: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:buildcache
-          cache-to: type=registry,ref=${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:buildcache,mode=max
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/${{ env.DOCKER_HUB_IMAGE_NAME }}:${{ env.WORDPRESS_VERSION }}-php${{ env.PHP_IMAGE_TAG }}
-      - uses: actions/checkout@v4
-      - run: docker-compose -f docker-compose.test.yml run --rm sut
+          targets: app-release
+      - uses: actions/checkout@v5
+      - run: docker compose -f compose.yml -f compose.test.yml run --rm phpunit-wordpress-plugin

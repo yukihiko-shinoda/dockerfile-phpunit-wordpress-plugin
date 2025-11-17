@@ -1,35 +1,50 @@
-ARG PHP_IMAGE_TAG
+ARG PHP_IMAGE_TAG=latest
 FROM php:${PHP_IMAGE_TAG}
 ARG PHP_IMAGE_TAG
+ARG SCAFFOLD_COMMAND_VERSION
 ARG WORDPRESS_VERSION
+# PHPUnit should be latest version as much as possible.
 ARG PHP_UNIT_VERSION=
 # ↓ @see https://github.com/docker-library/php/issues/391#issuecomment-346590029
 RUN docker-php-ext-install mysqli && docker-php-ext-enable mysqli
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN if echo $PHP_IMAGE_TAG | grep -q 'stretch' ; then echo "deb http://archive.debian.org/debian stretch main contrib non-free" > /etc/apt/sources.list ; fi
-RUN apt-get update \
-# ↓ wget                : To set up this image
-# ↓ git                 : To install dependency of PHPUnit 5.* at least myclabs/deep-copy
-# ↓ subversion          : Dependencies for install-wp-tests.sh
-# ↓ default-mysql-client: Dependencies for install-wp-tests.sh
-# ↓ unzip               : Dependencies for install-wp-tests.sh in case when WordPress version is nightly or trunk
- && apt-get install -y --no-install-recommends git wget subversion default-mysql-client unzip \
+RUN apt-get update  && apt-get install -y --no-install-recommends \
+    # To install dependency of PHPUnit 5.* at least myclabs/deep-copy
+    git \
+    # To set up this image
+    wget \
+    # Dependencies for install-wp-tests.sh
+    subversion \
+    # Dependencies for install-wp-tests.sh
+    default-mysql-client \
+    # Dependencies for install-wp-tests.sh in case when WordPress version is nightly or trunk
+    unzip \
+    # Dependencies for Developing in a container
+    # [5975 ms] Start: Run in container: gpgconf --list-dirs
+    # [5980 ms] /bin/sh: 13: gpgconf: not found
+    # [5980 ms] Exit code 127
+    gnupg \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 ENV COMPOSER_ALLOW_SUPERUSER=1
-COPY --chmod=755 ./shell-scripts-to-copy/vercomp.sh ./shell-scripts-to-copy/install-composer.sh ./shell-scripts-to-copy/composer-global-require.sh ./
+COPY --chmod=755 \
+     ./shell-scripts-to-copy/vercomp.sh \
+     ./shell-scripts-to-copy/install-composer.sh \
+     ./shell-scripts-to-copy/composer-global-require.sh \
+     ./
 RUN ./install-composer.sh
 RUN ./composer-global-require.sh
-ENV PATH $PATH:/root/.composer/vendor/bin
+ENV PATH=$PATH:/root/.composer/vendor/bin
 # ↓ Hot-fix for HTTP status 429 'Too Many Requests' when checkout testing suite in install-wp-tests
 # ↓ @see https://wordpress.org/support/topic/too-many-requests-when-trying-to-checkout-plugin/
-RUN wget --progress=dot:giga -O /usr/bin/install-wp-tests https://raw.githubusercontent.com/wp-cli/scaffold-command/v2.2.0/templates/install-wp-tests.sh \
+RUN wget --progress=dot:giga -O /usr/bin/install-wp-tests "https://raw.githubusercontent.com/wp-cli/scaffold-command/${SCAFFOLD_COMMAND_VERSION}/templates/install-wp-tests.sh" \
 # ↓ Remove confirmation for initialize test database since it stops automated testing
  && sed -i "/read\s-p\s'Are\syou\ssure\syou\swant\sto\sproceed?\s\[y\/N\]:\s'\sDELETE_EXISTING_DB/d" /usr/bin/install-wp-tests \
  && chmod +x /usr/bin/install-wp-tests
 # ↓ I decided "for the time being," "yes" may not be definitely better.
-ENV DELETE_EXISTING_DB yes
-ENV WP_CORE_DIR /usr/src/wordpress/
+ENV DELETE_EXISTING_DB=yes
+ENV WP_CORE_DIR=/usr/src/wordpress/
 RUN touch wp-tests-config.php \
  && install-wp-tests '' '' '' localhost "${WORDPRESS_VERSION}" true \
  && rm -f wp-tests-config.php
