@@ -14,7 +14,7 @@ install-wp-tests|RUN wget -O /usr/bin/install-wp-tests ...|[Releases · wp-cli/s
 ### 2. Run test on local
 
 ```shell script
-docker-compose -f docker-compose.test.yml run sut
+docker compose -f compose.yml -f compose.test.yml run sut
 ```
 
 ### 3. Commit
@@ -23,7 +23,7 @@ docker-compose -f docker-compose.test.yml run sut
 
 ### 5. Merge Pull Request
 
-### 6. Push with tag same with base image on latest revision of master branch
+### 6. Push with tag same with base image on latest revision of main branch
 
 EX:
 

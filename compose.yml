@@ -1,0 +1,11 @@
+---
+services:
+  phpunit-wordpress-plugin:
+    build:
+      context: .
+      args:
+        PHP_IMAGE_TAG: ${PHP_IMAGE_TAG:?err}
+        SCAFFOLD_COMMAND_VERSION: ${SCAFFOLD_COMMAND_VERSION:?err}
+        WORDPRESS_VERSION: ${WORDPRESS_VERSION:?err}
+        PHP_UNIT_VERSION: ${PHP_UNIT_VERSION:-}
+    image: futureys/phpunit-wordpress-plugin:${WORDPRESS_VERSION}-php${PHP_IMAGE_TAG}
