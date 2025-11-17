@@ -45,3 +45,5 @@ jobs:
           push: true
           builder: ${{ steps.buildx.outputs.name }}
           targets: app-release
+        env:
+          DOCKER_TAG: ${{ env.WORDPRESS_VERSION }}-php${{ env.PHP_IMAGE_TAG }}
