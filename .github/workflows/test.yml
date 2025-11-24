@@ -31,8 +31,6 @@ jobs:
       WORDPRESS_VERSION: ${{ matrix.software-versions[2] }}
       PHP_UNIT_VERSION: ${{ matrix.software-versions[3] }}
       MYSQL_VERSION: ${{ matrix.software-versions[4] }}
-      #Since the image: futureys/ssl-certificate:2.0.2 only supports sud-domain.
-      DOMAIN_NAME: futureys.net
     runs-on: ubuntu-latest
     steps:
       - uses: docker/setup-qemu-action@v3
@@ -42,11 +40,17 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
-      - id: extract-tag
-        run: echo "DOCKER_TAG=test" >> $GITHUB_ENV
       - uses: docker/bake-action@v6
         with:
           builder: ${{ steps.buildx.outputs.name }}
           targets: app-release
+        env:
+          DOCKER_TAG: ${{ env.WORDPRESS_VERSION }}-php${{ env.PHP_IMAGE_TAG }}
+      - uses: docker/bake-action@v6
+        with:
+          load: true
+          builder: ${{ steps.buildx.outputs.name }}
+        env:
+          DOCKER_TAG: ${{ env.WORDPRESS_VERSION }}-php${{ env.PHP_IMAGE_TAG }}
       - uses: actions/checkout@v5
       - run: docker compose -f compose.yml -f compose.test.yml run --rm phpunit-wordpress-plugin

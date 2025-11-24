@@ -4,23 +4,23 @@ services:
   # that SSL certificate isn't able to set CN, we need to create our own SSL certificate files.
   ssl_certificate:
     environment:
-      DOMAIN_NAME: ${DOMAIN_NAME?err}
-    image: futureys/ssl-certificate:2.0.2
+      DOMAIN_NAME: database
+      SUPPORT_ROOT_DOMAIN: true
+    image: futureys/ssl-certificate:2.1.1
     volumes:
       - pki:/etc/pki
-  #Since the image: futureys/ssl-certificate:2.0.2 only supports sud-domain.
-  database.futureys.net:
+  database:
     command:
-      - --ssl-ca=/etc/pki/CA/cacert-${DOMAIN_NAME?err}.pem
-      - --ssl-cert=/etc/pki/tls/certs/servercert-${DOMAIN_NAME?err}.pem
-      - --ssl-key=/etc/pki/tls/private/serverkey-${DOMAIN_NAME?err}.pem
+      - --ssl-ca=/etc/pki/CA/cacert-database.pem
+      - --ssl-cert=/etc/pki/tls/certs/servercert-database.pem
+      - --ssl-key=/etc/pki/tls/private/serverkey-database.pem
       # - --mysql-native-password=ON
       # - --default-authentication-plugin=mysql_native_password
     depends_on:
       - ssl_certificate
     entrypoint: setup-certificate.sh
     environment:
-      DOMAIN_NAME: ${DOMAIN_NAME?err}
+      DOMAIN_NAME: database
       MYSQL_ROOT_PASSWORD: examplepass
     image: mysql:${MYSQL_VERSION:?err}
     volumes:
@@ -35,12 +35,10 @@ services:
       - -c
       - "phpunit --version && phpcs --version"
     depends_on:
-      - database.${DOMAIN_NAME?err}
+      - database
       - ssl_certificate
     environment:
-      DATABASE_HOST: database.${DOMAIN_NAME?err}
       DATABASE_PASSWORD: examplepass
-      DOMAIN_NAME: ${DOMAIN_NAME?err}
     volumes:
       # To enable SSL for MySQL serving.
       - pki:/etc/pki

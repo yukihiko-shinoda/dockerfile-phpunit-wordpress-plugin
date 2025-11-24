@@ -1,4 +1,6 @@
 #!/usr/bin/env sh
+set -eu
+
 SERVERCERT="/etc/pki/tls/certs/servercert-${DOMAIN_NAME}.pem"
 SERVERKEY="/etc/pki/tls/private/serverkey-${DOMAIN_NAME}.pem"
 while :; do
