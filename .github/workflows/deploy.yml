@@ -27,8 +27,6 @@ jobs:
       WORDPRESS_VERSION: ${{ matrix.software-versions[2] }}
       PHP_UNIT_VERSION: ${{ matrix.software-versions[3] }}
       MYSQL_VERSION: ${{ matrix.software-versions[4] }}
-      #Since the image: futureys/ssl-certificate:2.0.2 only supports sud-domain.
-      DOMAIN_NAME: futureys.net
     runs-on: ubuntu-latest
     steps:
       - uses: docker/setup-qemu-action@v3
