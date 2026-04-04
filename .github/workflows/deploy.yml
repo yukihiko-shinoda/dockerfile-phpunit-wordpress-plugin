@@ -36,7 +36,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
-      - uses: docker/bake-action@v6
+      - uses: docker/bake-action@v7
         with:
           push: true
           builder: ${{ steps.buildx.outputs.name }}
